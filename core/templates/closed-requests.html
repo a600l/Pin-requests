@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Closed Requests {% endblock %}
+
+{% block main %}
+{% for request_instance in closed_requests %}
+<p>Order ID: {{ request_instance.order_id }}</p>
+<p>Remarks: {{ request_instance.remarks }}</p>  <!-- Updated field name -->
+<!-- display other fields as needed -->
+{% endfor %}
+
+{% endblock %}    

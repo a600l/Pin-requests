@@ -1,0 +1,67 @@
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.name }}
+    
+
+    <textarea id="pasteArea" contenteditable></textarea>
+    {{ form.image_data.as_hidden }}
+    <button type="submit" id="submitBtn">Submit</button>
+
+    <img id="previewImage" class="i">
+</form>
+
+
+<script>
+    function convertImageToBase64(file, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            callback(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    document.getElementById('id_image_data').addEventListener('paste', function(e) {
+        if (e.clipboardData.items) {
+            var items = e.clipboardData.items;
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        var blob = items[i].getAsFile();
+                        convertImageToBase64(blob, function(base64String) {
+                            // Now you have the base64 string of the image. You can set it to the value of a hidden input.
+                            document.getElementById('id_image_data').value = base64String;
+                            // Set the src of the img tag to the base64 string
+                            document.getElementById('previewImage').src = base64String;
+                        });
+                    }
+                }
+            }
+        }
+    });
+
+
+
+
+    var openModalBtn = document.getElementById('openModalBtn');
+    var closeModalBtn = document.getElementsByClassName('close-btn')[0];
+    var requestModal = document.getElementById('requestModal');
+
+    openModalBtn.onclick = function() {
+        requestModal.style.display = 'block';
+    }
+
+    closeModalBtn.onclick = function() {
+        requestModal.style.display = 'none';
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == requestModal) {
+            requestModal.style.display = 'none';
+        }
+    };
+
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        alert('Request submitted successfully!');
+    });
+    </script>

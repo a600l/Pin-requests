@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'maincss.css' %}">
+</head>
+<body>
+    <header>
+        <label class="logo">Pin-Requests</label>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'new-request' %}" class="nav-link {% if request.path == '/new-request/' %}active{% endif %}">New Requests</a></li>
+                <li><a href="{% url 'all-open-requests' %}" class="nav-link {% if request.path == '/all-open-requests/' %}active{% endif %}">All Open Requests</a></li>
+                <li><a href="{% url 'closed-requests' %}" class="nav-link {% if request.path == '/closed-requests/' %}active{% endif %}">Closed Requests</a></li>
+            </ul>
+        </nav>
+        <a class='logout' href="{% url 'logout' %}">Logout</a>
+    </header>   
+
+{% block main %}
+{% endblock %}
+
+</body>
+</html>

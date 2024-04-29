@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- templates/upload.html -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <button type="button" id="openModal">Open Modal</button>
+    
+    {{ form.name }}
+    {{ form.image_data }}
+    <button type="submit">Submit</button>
+</form>
+
+<!-- Modal -->
+<div id="myModal" style="display: none;">
+    <h2>Paste Image Here</h2>
+    <div id="pasteArea" contenteditable></div>
+    <button type="button" id="closeModal">Close Modal</button>
+</div>
+</body>
+
+
+
+<script>
+    function convertImageToBase64(file, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            callback(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    document.getElementById('openModal').addEventListener('click', function() {
+        document.getElementById('myModal').style.display = 'block';
+    });
+    
+    document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('myModal').style.display = 'none';
+    });
+    
+    document.getElementById('pasteArea').addEventListener('paste', function(e) {
+        if (e.clipboardData.items) {
+            var items = e.clipboardData.items;
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        var blob = items[i].getAsFile();
+                        convertImageToBase64(blob, function(base64String) {
+                            // Now you have the base64 string of the image. You can set it to the value of a hidden input.
+                            document.getElementById('id_image_data').value = base64String;
+                        });
+                    }
+                }
+            }
+        }
+    });
+    </script>
+    
+</html>

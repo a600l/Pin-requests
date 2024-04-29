@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}New Request{% endblock %}
+
+{% block main %}
+<!-- templates/new_request.html -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} 
+    <br>
+    {{ form.representative_name.label_tag }}
+    <br>
+    {{ form.representative_name }}
+    <br>
+    {{ form.order_id.label_tag }}
+    <br>
+    {{ form.order_id }}
+    <br>
+    {{ form.pnr.label_tag }}
+    <br>
+    {{ form.pnr }}
+    <br>
+    {{ form.comments.label_tag }}
+    <br>    
+    {{ form.comments }}
+    
+    <br>
+    <textarea id="pasteArea" contenteditable></textarea>
+    {{ form.image_data.as_hidden }}
+    <button type="submit">Submit</button>
+</form>
+<img id="previewImage">
+
+<script>
+function convertImageToBase64(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        callback(e.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+document.getElementById('pasteArea').addEventListener('paste', function(e) {
+    if (e.clipboardData.items) {
+        var items = e.clipboardData.items;
+        if (items) {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    var blob = items[i].getAsFile();
+                    convertImageToBase64(blob, function(base64String) {
+                        // Now you have the base64 string of the image. You can set it to the value of a hidden input.
+                        document.getElementById('id_image_data').value = base64String;
+                        // Set the src of the img tag to the base64 string
+                        document.getElementById('previewImage').src = base64String;
+                    });
+                }
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}    
+

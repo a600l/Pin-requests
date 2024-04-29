@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}All Open Request{% endblock %}
+
+{% block main %}
+
+
+{% for request_instance in open_requests %}
+    <a href="{% url 'open-request-detail' request_instance.pk %}">{{ request_instance.order_id }}</a>
+    <!-- display other fields as needed -->
+{% endfor %}
+
+
+{% endblock %}    
